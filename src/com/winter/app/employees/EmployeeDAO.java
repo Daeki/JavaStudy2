@@ -11,19 +11,21 @@ import com.winter.app.utils.DBConnection;
 public class EmployeeDAO {
 	
 	
-	public List<EmployeeDTO> getList()throws Exception{
+	public List<EmployeeDTO> getList(String search)throws Exception{
 		List<EmployeeDTO> ar = new ArrayList<>();
 		
 		//1.DB연결
 		Connection con = DBConnection.getConnection();
 		
 		//2. SQL문 생성
-		String sql ="SELECT EMPLOYEE_ID, LAST_NAME, JOB_ID FROM EMPLOYEES";
+		String sql ="SELECT EMPLOYEE_ID, LAST_NAME, JOB_ID FROM EMPLOYEES"
+				+ " WHERE LAST_NAME LIKE '%'||?||'%'";
 		
 		//3. 미리 전송
 		PreparedStatement st = con.prepareStatement(sql);
 		
 		//4. ? 값 세팅
+		st.setString(1, search);
 		
 		//5. 최종 전송 및 결과 처리
 		ResultSet rs = st.executeQuery();
@@ -35,6 +37,9 @@ public class EmployeeDAO {
 			employeeDTO.setJob_id(rs.getString("JOB_ID"));
 			ar.add(employeeDTO);
 		}
+		
+		//6.자원 해제
+		DBConnection.disConnect(rs, st, con);
 		
 		return ar;
 	}

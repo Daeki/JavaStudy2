@@ -23,7 +23,7 @@ public class EmployeeController {
 			int select = sc.nextInt();
 			
 			if(select==1) {
-				List<EmployeeDTO> ar = employeeService.getList();
+				List<EmployeeDTO> ar = employeeService.getList(sc);
 				employeeView.view(ar);
 			}else {
 				break;
