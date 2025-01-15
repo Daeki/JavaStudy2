@@ -4,11 +4,40 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.winter.app.utils.DBConnection;
 
 public class EmployeeDAO {
+	
+	public Map<String, Object> getInfo() throws Exception {
+		//부서별, 부서번호, 평균월급, 사원수,
+		Connection con = DBConnection.getConnection();
+		
+		String sql = "SELECT AVG(SALARY) a, COUNT(EMPLOYEE_ID)"
+				+ " FROM EMPLOYEES"
+				+ " GROUP BY DEPARTMENT_ID";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		List<Map<String, Object>> ar = new ArrayList<>();
+		while(rs.next()) {
+			Map<String, Object> map = new HashMap<>();	
+			map.put("avg", rs.getDouble("a"));
+			map.put("count", rs.getInt(2));
+			ar.add(map);
+		}
+		
+		DBConnection.disConnect(rs, st, con);
+		
+		return null;
+		
+		
+		
+	}
 	
 	
 	public List<EmployeeDTO> getList(String search)throws Exception{
