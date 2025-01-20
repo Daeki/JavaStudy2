@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.winter.app.departments.DepartmentDTO;
 import com.winter.app.utils.DBConnection;
 
 public class EmployeeDAO {
@@ -72,5 +73,32 @@ public class EmployeeDAO {
 		
 		return ar;
 	}
+	
+	public void getInfo2() throws Exception {
+		Connection con = DBConnection.getConnection();
+		String sql="SELECT E.EMPLOYEE_ID , E.SALARY , E.JOB_ID , D.DEPARTMENT_NAME , E.DEPARTMENT_ID "
+				+ "FROM EMPLOYEES E "
+				+ "	 INNER JOIN "
+				+ "	 DEPARTMENTS D "
+				+ "	 ON E.DEPARTMENT_ID = D.DEPARTMENT_ID AND E.FIRST_NAME ='Lex'";
+				
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		EmployeeDTO employeeDTO=null;
+		if(rs.next()) {
+			employeeDTO = new EmployeeDTO();
+			employeeDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+			employeeDTO.setSalary(rs.getDouble("SALARY"));
+			employeeDTO.setJob_id(rs.getString("JOB_ID"));
+			employeeDTO.setDepartmentDTO(new DepartmentDTO());
+			employeeDTO.getDepartmentDTO().setDepartment_name("DEPARTMENT_NAME");
+			
+		}
+		
+	}
+	
+	
+	
 
 }

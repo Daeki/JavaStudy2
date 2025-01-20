@@ -71,5 +71,98 @@ public class DepartmentDAO {
 		
 		return departmentDTO;
 	}
+	
+	public DepartmentDTO getName()throws Exception{
+		Connection con = DBConnection.getConnection();
+		
+		String sql="SELECT DEPARTMENT_NAME "
+				+ "FROM DEPARTMENTS "
+				+ "WHERE DEPARTMENT_ID = "
+				+ "		("
+				+ "			SELECT DEPARTMENT_ID FROM EMPLOYEES "
+				+ "			WHERE FIRST_NAME='Lex'"
+				+ "		)";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		
+		DepartmentDTO departmentDTO=null; 
+		if(rs.next()) {
+			departmentDTO = new DepartmentDTO();
+			departmentDTO.setDepartment_name(rs.getString("DEPARTMENT_NAME"));
+		}
+		
+		DBConnection.disConnect(rs, st, con);
+		
+		return departmentDTO;
+		
+	}
+	
+	//Insert
+	public int add(DepartmentDTO departmentDTO)throws Exception{
+		Connection connection = DBConnection.getConnection();
+		
+		String sql="INSERT INTO DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID, LOCATION_ID)"
+				+ " VALUES (DEPARTMENTS_SEQ.NEXTVAL, ?, ?, ?)";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setString(1, departmentDTO.getDepartment_name());
+		st.setInt(2, departmentDTO.getManager_id());
+		st.setInt(3, departmentDTO.getLocation_id());
+		
+		//최종 전송 (INSERT, UPDATE, DELETE)
+		//결과 int , 메서드는 executeUpdate
+		int result = st.executeUpdate();
+		
+		DBConnection.disConnect(st, connection);
+		
+		return result;
+		
+	}
+	
+	//update
+	public int update(DepartmentDTO departmentDTO) throws Exception {
+		//하나의 부서에 매니저번호 수정
+		Connection connection = DBConnection.getConnection();
+		
+		String sql="UPDATE DEPARTMENTS SET MANAGER_ID=? WHERE DEPARTMENT_ID=?";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setInt(1, departmentDTO.getManager_id());
+		st.setInt(2, departmentDTO.getDepartment_id());
+		
+		int result = st.executeUpdate();
+		
+		DBConnection.disConnect(st, connection);
+		
+		return result;
+		
+	}
+	
+	public int delete(DepartmentDTO departmentDTO)throws Exception{
+		//하나의 부서 삭제
+		Connection connection = DBConnection.getConnection();
+		String sql = "DELETE DEPARTMENTS WHERE DEPARTMENT_ID=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setInt(1, departmentDTO.getDepartment_id());
+		
+		int result = st.executeUpdate();
+		
+		DBConnection.disConnect(st, connection);
+		
+		return result;
+	}
+	
+	
+	
 
 }
+
+
+
+
+
+
