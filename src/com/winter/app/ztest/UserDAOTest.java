@@ -14,6 +14,19 @@ public class UserDAOTest {
 		this.userDAO = new UserDAO();
 	}
 	
+	public void getDetailTest()throws Exception{
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUserName("testuser123");
+		userDTO = userDAO.getDetail(userDTO);
+		
+		if(userDTO != null) {
+			System.out.println("Null이 아니다");
+		}else {
+			System.out.println("Null이다");
+		}
+		
+	}
+	
 	public void getListTest()throws Exception{
 		List<UserDTO> ar = userDAO.getList();
 		

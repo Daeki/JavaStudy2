@@ -25,6 +25,7 @@ public class UserDAO {
 		st.setString(4, userDTO.getPhone());
 		st.setString(5, userDTO.getEmail());
 		
+		
 		int result = st.executeUpdate();
 		
 		DBConnection.disConnect(st, con);
@@ -55,6 +56,41 @@ public class UserDAO {
 		return ar;
 		
 	}
+	
+	//회원의 ID로 회원한명의 모든 정보를 조회 getDetail
+	
+	public UserDTO getDetail(UserDTO userDTO)throws Exception{
+		
+		
+		Connection con = DBConnection.getConnection();
+		
+		String sql ="SELECT * FROM USERS WHERE USERNAME=?";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		st.setString(1, userDTO.getUserName());
+		
+		ResultSet rs = st.executeQuery();
+		
+		userDTO=null;
+		
+		if(rs.next()) {
+			userDTO = new UserDTO();
+			userDTO.setUserName(rs.getString("USERNAME"));
+			userDTO.setPassword(rs.getString("PASSWORD"));
+			userDTO.setName(rs.getString("NAME"));
+			userDTO.setEmail(rs.getString("EMAIL"));
+			userDTO.setPhone(rs.getString("PHONE"));
+			
+		}
+		
+		DBConnection.disConnect(rs, st, con);
+		
+		return userDTO;
+		
+	}
+	
+	
 	
 	
 	

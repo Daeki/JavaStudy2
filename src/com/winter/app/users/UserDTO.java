@@ -1,5 +1,7 @@
 package com.winter.app.users;
 
+import java.sql.Date;
+
 public class UserDTO {
 	//선언
 	//접근지정자 private
@@ -12,6 +14,7 @@ public class UserDTO {
 	private String name;
 	private String phone;
 	private String email;
+	private Date date;
 	
 	
 	public String getUserName() {

@@ -11,7 +11,8 @@ public class TestMain {
 			UserDAOTest userDAOTest = new UserDAOTest();
 			
 			//userDAOTest.joinTest();
-			userDAOTest.getListTest();
+			//userDAOTest.getListTest();
+			userDAOTest.getDetailTest();
 			
 			
 			
